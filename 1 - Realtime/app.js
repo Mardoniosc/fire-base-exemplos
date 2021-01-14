@@ -40,7 +40,7 @@ function criarCard() {
    * push() : Cria um id unico e insere os dados dentro desse uid
    */
   firebase: ref.push(card).then((snapshot) => {
-    // adicionaCardATela(card, snapshot.key)
+    adicionaCardATela(card, snapshot.key);
   });
 }
 
@@ -161,19 +161,31 @@ document.addEventListener("DOMContentLoaded", function () {
   //   });
   // });
 
-  ref.on("child_added", (snapshot) => {
+  // ref.on("child_added", (snapshot) => {
+  //   adicionaCardATela(snapshot.val(), snapshot.key);
+  // });
+
+  // ref.on("child_changed", (snapshot, uid) => {
+  //   console.log(snapshot.key, uid);
+  // });
+
+  // ref.on("child_removed", snapshot => {
+  //   console.log('Removed => ', snapshot.key);
+  // });
+
+  /**
+   * ORDENAÇÃO
+   * .oderByChild('filho'): Ordena pela propriedade filho passado como parametro
+   * .orderByKey(): Ordena pela chave dos nós
+   * .orderByValue(): Ordena pelo valor de cada propriedade do nó
+   * Não vale para nos que tenha como filho outros nos
+   * 
+   * É POSSIVEL UTILIZAR APENAS 1 METODOS DE ORDENAÇÃO POR VEZ
+   */
+
+  ref.orderByChild("idade").on("child_added", (snapshot) => {
     adicionaCardATela(snapshot.val(), snapshot.key);
   });
-
-  ref.on("child_changed", (snapshot, uid) => {
-    console.log(snapshot.key, uid);
-  });
-
-  ref.on("child_removed", snapshot => { 
-    console.log('Removed => ', snapshot.key);
-  });
-
-
 });
 
 /**
