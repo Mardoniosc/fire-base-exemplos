@@ -40,7 +40,6 @@ function criarCard() {
    * push() : Cria um id unico e insere os dados dentro desse uid
    */
   firebase: ref.push(card).then((snapshot) => {
-    adicionaCardATela(card, snapshot.key);
   });
 }
 
@@ -179,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * .orderByKey(): Ordena pela chave dos nós
    * .orderByValue(): Ordena pelo valor de cada propriedade do nó
    * Não vale para nos que tenha como filho outros nos
-   * 
+   *
    * É POSSIVEL UTILIZAR APENAS 1 METODOS DE ORDENAÇÃO POR VEZ
    */
 
@@ -201,10 +200,17 @@ document.addEventListener("DOMContentLoaded", function () {
    * .limitToFirst(Number) : Retorna apenas os primeiros valores valores de acordo com o numero passado por parametro
    * limitToLast(Number) : Retorna apenas ultimos valores de acordo com o numero passado por parametro
    */
-  ref.orderByChild("idade").limitToLast(2).on("child_added", (snapshot) => {
-    adicionaCardATela(snapshot.val(), snapshot.key);
-  });
+  // ref.orderByChild("idade").startAt(0).limitToLast(20).on("child_added", (snapshot) => {
+  //   adicionaCardATela(snapshot.val(), snapshot.key);
+  // });
 
+  ref.on("value", (snapshot) => {
+    snapshot.forEach((value) => {
+      adicionaCardATela(value.val(), value.key);
+    });
+
+    ref.off('value');
+  });
 });
 
 /**
