@@ -1,4 +1,4 @@
- /**
+/**
  * Váriaveis usadas durante o desenvolvimento
  */
 var CARD_CONTAINER = document.getElementsByClassName("card-container")[0];
@@ -14,7 +14,7 @@ var NOMES = [
   "Igor",
   "Joana",
 ];
-var ref = firebase.database().ref('card');
+var ref = firebase.database().ref("card");
 
 /**
  * Botão para cria um card no card-contaier
@@ -32,8 +32,6 @@ function criarCard() {
    * ref url em string para referenciado do caminho do banco
    * set() : metodo que cria dados na url passada
    */
-  firebase:
-
   // ref.child(card.nome).set(card).then(() => {
   //   adicionaCardATela(card)
   // })
@@ -41,9 +39,9 @@ function criarCard() {
   /**
    * push() : Cria um id unico e insere os dados dentro desse uid
    */
-  ref.push(card).then((snapshot) => {
-    adicionaCardATela(card, snapshot.key)
-  })
+  firebase: ref.push(card).then((snapshot) => {
+    // adicionaCardATela(card, snapshot.key)
+  });
 }
 
 /**
@@ -57,10 +55,12 @@ function deletar(id) {
    * .remove(): Remove o no em que o metodo é utilizado
    * remove também todos os nos dentro desse nó removido
    */
-  ref.child(id).remove().then(() => {
-    card.remove();
-  })
-
+  ref
+    .child(id)
+    .remove()
+    .then(() => {
+      card.remove();
+    });
 
   /**
    * .set(null) : Ao setar um no em nulo exclui esse no do firebase
@@ -68,9 +68,6 @@ function deletar(id) {
   // ref.child(id).set(null).then(() => {
   //   card.remove();
   // });
-
-
-
 }
 
 /**
@@ -79,7 +76,7 @@ function deletar(id) {
  */
 function curtir(id) {
   var card = document.getElementById(id);
-  var count = card.getElementsByClassName('count-number')[0];
+  var count = card.getElementsByClassName("count-number")[0];
   var countNumber = +count.innerText;
   countNumber = countNumber + 1;
 
@@ -88,9 +85,12 @@ function curtir(id) {
    * e passar o valor atualizado ou pode-ser passar o objeto completo e
    * atualiza-lo com os novos valores nos campos correspondentes
    */
-  ref.child(id + '/curtidas').set(countNumber).then(() => {
-    count.innerText = countNumber;
-  })
+  ref
+    .child(id + "/curtidas")
+    .set(countNumber)
+    .then(() => {
+      count.innerText = countNumber;
+    });
 }
 
 /**
@@ -99,21 +99,22 @@ function curtir(id) {
  */
 function descurtir(id) {
   var card = document.getElementById(id);
-  var count = card.getElementsByClassName('count-number')[0];
+  var count = card.getElementsByClassName("count-number")[0];
   var countNumber = +count.innerText;
-  if(countNumber > 0){
+  if (countNumber > 0) {
     countNumber = countNumber - 1;
 
     /**
      * update(): Recebe um objeto (e apenas um objeto)
      * e atualiza APENAS as propriedades desse objeto
      */
-    ref.child(id).update({curtidas: countNumber}).then(() => {
-      count.innerText = countNumber;
-    })
+    ref
+      .child(id)
+      .update({ curtidas: countNumber })
+      .then(() => {
+        count.innerText = countNumber;
+      });
   }
-
-
 }
 
 /**
@@ -124,33 +125,55 @@ document.addEventListener("DOMContentLoaded", function () {
    * Once retorna os dados lidos de uma URL
    * snapshot: objeto retornado pela leitura
    */
-  ref.once('value').then(snapshot => {
+  // ref.once('value').then(snapshot => {
 
-    // // acessa um no filho
-    // console.log('Child => ',snapshot.child('-MR0BxrfsmSTfqF9_sHU').val());
+  //   // // acessa um no filho
+  //   // console.log('Child => ',snapshot.child('-MR0BxrfsmSTfqF9_sHU').val());
 
-    // // checa se exite algo no snapshot
-    // console.info('Exists() => ', snapshot.exists());
+  //   // // checa se exite algo no snapshot
+  //   // console.info('Exists() => ', snapshot.exists());
 
-    // // checa se exite filho passado na url
-    // console.info('hasChild() nome => ', snapshot.hasChild('-MR0BxrfsmSTfqF9_sHU/nome'));
-    // console.info('hasChild() comentario => ', snapshot.hasChild('-MR0BxrfsmSTfqF9_sHU/comentario'));
+  //   // // checa se exite filho passado na url
+  //   // console.info('hasChild() nome => ', snapshot.hasChild('-MR0BxrfsmSTfqF9_sHU/nome'));
+  //   // console.info('hasChild() comentario => ', snapshot.hasChild('-MR0BxrfsmSTfqF9_sHU/comentario'));
 
-    // // se exite algum filho no no
-    // console.log('hasChildren() => ', snapshot.child('-MR0BxrfsmSTfqF9_sHU'));
+  //   // // se exite algum filho no no
+  //   // console.log('hasChildren() => ', snapshot.child('-MR0BxrfsmSTfqF9_sHU'));
 
-    // // numro de filhos no snapshot
-    // console.log('numChildren => ', snapshot.numChildren());
+  //   // // numro de filhos no snapshot
+  //   // console.log('numChildren => ', snapshot.numChildren());
 
-    // // a chave do snapshot/caminho
-    // console.log('Chave snapshot:', snapshot.key);
+  //   // // a chave do snapshot/caminho
+  //   // console.log('Chave snapshot:', snapshot.key);
+
+  //   snapshot.forEach(value => {
+  //     // console.log('Chave:', value.key);
+  //     adicionaCardATela(value.val(), value.key);
+  //   });
+  // })
+
+  /**
+   * .ON
+   */
+  // ref.on("value", (snapshot) => {
+  //   snapshot.forEach((value) => {
+  //     adicionaCardATela(value.val(), value.key);
+  //   });
+  // });
+
+  ref.on("child_added", (snapshot) => {
+    adicionaCardATela(snapshot.val(), snapshot.key);
+  });
+
+  ref.on("child_changed", (snapshot, uid) => {
+    console.log(snapshot.key, uid);
+  });
+
+  ref.on("child_removed", snapshot => { 
+    console.log('Removed => ', snapshot.key);
+  });
 
 
-    snapshot.forEach(value => {
-      // console.log('Chave:', value.key);
-      adicionaCardATela(value.val(), value.key);
-    });
-  })
 });
 
 /**
