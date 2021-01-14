@@ -25,11 +25,25 @@ function criarCard() {
     curtidas: 0,
   };
 
+  /**
+   * .collection('coleção') : referenciar a coleção
+   * .doc('documento') : Referencia o documento
+   * .set({dados}) : Insere o objeto passado por paramentro
+   */
+  //   firebase
+  //     .firestore()
+  //     .collection("cards")
+  //     .doc("1")
+  //     .set(card)
+  //     .then(() => {
+  //       console.log("Dados salvos");
+  //       adicionaCardATela(card, 1);
+  //     });
+
   firebase
     .firestore()
     .collection("cards")
-    .doc("1")
-    .set(card)
+    .add({ card })
     .then(() => {
       console.log("Dados salvos");
       adicionaCardATela(card, 1);
