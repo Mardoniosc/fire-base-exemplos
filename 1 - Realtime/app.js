@@ -39,8 +39,7 @@ function criarCard() {
   /**
    * push() : Cria um id unico e insere os dados dentro desse uid
    */
-  firebase: ref.push(card).then((snapshot) => {
-  });
+  firebase: ref.push(card).then((snapshot) => {});
 }
 
 /**
@@ -120,6 +119,10 @@ function descurtir(id) {
  * Espera o evento de que a DOM está pronta para executar algo
  */
 document.addEventListener("DOMContentLoaded", function () {
+  firebase.database.enableLogging(function (message) {
+    console.log('[firebase]', message);
+  });
+
   /**
    * Once retorna os dados lidos de uma URL
    * snapshot: objeto retornado pela leitura
@@ -209,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
       adicionaCardATela(value.val(), value.key);
     });
 
-    ref.off('value');
+    ref.off("value");
   });
 });
 
