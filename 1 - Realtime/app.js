@@ -88,7 +88,7 @@ function curtir(id) {
     .set(countNumber)
     .then(() => {
       count.innerText = countNumber;
-    });
+    }, err => console.error(err));
 }
 
 /**
@@ -111,7 +111,8 @@ function descurtir(id) {
       .update({ curtidas: countNumber })
       .then(() => {
         count.innerText = countNumber;
-      });
+      })
+      .catch((err) => console.log("Erro ao descurtir => ", err));
   }
 }
 
@@ -119,9 +120,10 @@ function descurtir(id) {
  * Espera o evento de que a DOM está pronta para executar algo
  */
 document.addEventListener("DOMContentLoaded", function () {
-  firebase.database.enableLogging(function (message) {
-    console.log('[firebase]', message);
-  });
+  // LOGGING DO STATUS DAS CHAMADAS DO FIREBASE
+  // firebase.database.enableLogging(function (message) {
+  //   console.log('[firebase]', message);
+  // });
 
   /**
    * Once retorna os dados lidos de uma URL
@@ -213,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     ref.off("value");
-  });
+  }, err => console.log('Erro no on =>', err));
 });
 
 /**
