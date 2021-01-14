@@ -192,9 +192,19 @@ document.addEventListener("DOMContentLoaded", function () {
    * .endAt() : Traz valore cujo valor passado na query va até o valor passado por parametro no metodo
    * .equalTo(): traz valores cujo valor passado na query vata exatamente com o valor da propriedade selecionada
    */
-  ref.orderByChild("idade").startAt(25).endAt(30).on("child_added", (snapshot) => {
+  // ref.orderByChild("idade").startAt(25).endAt(30).on("child_added", (snapshot) => {
+  //   adicionaCardATela(snapshot.val(), snapshot.key);
+  // });
+
+  /**
+   * Limites
+   * .limitToFirst(Number) : Retorna apenas os primeiros valores valores de acordo com o numero passado por parametro
+   * limitToLast(Number) : Retorna apenas ultimos valores de acordo com o numero passado por parametro
+   */
+  ref.orderByChild("idade").limitToLast(2).on("child_added", (snapshot) => {
     adicionaCardATela(snapshot.val(), snapshot.key);
   });
+
 });
 
 /**
