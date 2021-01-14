@@ -40,10 +40,13 @@ function criarCard() {
   //       adicionaCardATela(card, 1);
   //     });
 
+  /**
+   * .add({dados}) : adiciona os dados dentro de um UID gerado automaticamente
+   */
   firebase
     .firestore()
     .collection("cards")
-    .add({ card })
+    .add(card)
     .then(() => {
       console.log("Dados salvos");
       adicionaCardATela(card, 1);
@@ -71,7 +74,46 @@ function descurtir(id) {}
 /**
  * Espera o evento de que a DOM está pronta para executar algo
  */
-document.addEventListener("DOMContentLoaded", function () {});
+document.addEventListener("DOMContentLoaded", function () {
+  firebase
+    .firestore()
+    .collection("cards")
+    .get()
+    .then((snapshot) => {
+
+      //Os documentos dentro da minha coleção, retorna um objeto e deve-se utilizar um forEach
+      // snapshot.docs()
+
+      // Uma propriedade que retorna um booleano se snapshot estiver vazio
+      // snapshot.empty
+
+      // são os metadados da coleção
+      // snapshot.metadata
+
+      // Retorna a query utilizada no filtro para esse get
+      // snapshot.query
+
+      // O numero de documenbtos dentro dessa coleção
+      // snapshot.size
+
+      // retorna um array com as mudanças que essa coleção sofreu desde a ultima leitura
+      // snapshot.docChanges
+
+      snapshot.docs.forEach((card) => {
+        
+        // retorna os daddos do meu documento
+        // card.data()
+
+        // Retorna o UID do meu documento
+        // card.id
+
+        // retorna um booleano caso o documento passado seja igual ao documento utilizado
+        // card.isEqual(doc)
+
+        adicionaCardATela(card.data(), card.id);
+      });
+    });
+});
 
 /**
  * Adiciona card na tela
