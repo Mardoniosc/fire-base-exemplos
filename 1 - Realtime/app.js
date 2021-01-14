@@ -39,7 +39,21 @@ function criarCard() {
   /**
    * push() : Cria um id unico e insere os dados dentro desse uid
    */
-  firebase: ref.push(card).then((snapshot) => {});
+  // firebase: ref.push(card).then((snapshot) => {
+  //   // adicionaCardATela(card, snapshot.key)
+  // });
+
+  /**
+   * USANDO O FETCH PARA ADICIONAR O CARD
+   */
+  fetch(
+    "https://curso-firebase-app-85b96-default-rtdb.firebaseio.com/card.json",
+    {
+      body: JSON.stringify(card),
+      method: "POST",
+      mode: "no-cors",
+    }
+  ).catch((err) => console.log("Erro ao adicionar => ", err));
 }
 
 /**
@@ -86,9 +100,12 @@ function curtir(id) {
   ref
     .child(id + "/curtidas")
     .set(countNumber)
-    .then(() => {
-      count.innerText = countNumber;
-    }, err => console.error(err));
+    .then(
+      () => {
+        count.innerText = countNumber;
+      },
+      (err) => console.error(err)
+    );
 }
 
 /**
@@ -209,13 +226,26 @@ document.addEventListener("DOMContentLoaded", function () {
   //   adicionaCardATela(snapshot.val(), snapshot.key);
   // });
 
-  ref.on("value", (snapshot) => {
-    snapshot.forEach((value) => {
-      adicionaCardATela(value.val(), value.key);
-    });
+  // ref.on("value", (snapshot) => {
+  //   snapshot.forEach((value) => {
+  //     adicionaCardATela(value.val(), value.key);
+  //   });
 
-    ref.off("value");
-  }, err => console.log('Erro no on =>', err));
+  //   ref.off("value");
+  // }, err => console.log('Erro no on =>', err));
+
+  /**
+   *  USANDO O FETCH NO LUGAR DA BLIBLIOTECA DO FIREBASE
+   */
+  fetch(
+    "https://curso-firebase-app-85b96-default-rtdb.firebaseio.com/card.json"
+  )
+    .then((res) => res.json())
+    .then((res) => {
+      for (var key in res) {
+        adicionaCardATela(res[key], key);
+      }
+    });
 });
 
 /**
