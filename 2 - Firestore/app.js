@@ -75,12 +75,14 @@ function descurtir(id) {}
  * Espera o evento de que a DOM está pronta para executar algo
  */
 document.addEventListener("DOMContentLoaded", function () {
-
   /**
    * .get() : busca o resultado apenas uma vez
    */
-  firebase.firestore().collection("cards").get().then((snapshot) => {
-
+  firebase
+    .firestore()
+    .collection("cards")
+    .get()
+    .then((snapshot) => {
       //Os documentos dentro da minha coleção, retorna um objeto e deve-se utilizar um forEach
       // snapshot.docs()
 
@@ -100,46 +102,42 @@ document.addEventListener("DOMContentLoaded", function () {
       // snapshot.docChanges
 
       snapshot.docs.forEach((card) => {
-        
         // retorna os daddos do meu documento
         // card.data()
-
         // Retorna o UID do meu documento
         // card.id
-
         // retorna um booleano caso o documento passado seja igual ao documento utilizado
         // card.isEqual(doc)
-
         // adicionaCardATela(card.data(), card.id);
       });
-  });
-
+    });
 
   /**
    * .onSnapshot() : Observando em tempo real
    */
+  firebase
+    .firestore()
+    .collection("cards")
+    .onSnapshot((snapshot) => {
+      // Usar dessa forma é equivalente ao .on('value') do Realtime Database
+      // snapshot.docs.forEach();
 
-   firebase.firestore().collection('cards').onSnapshot(snapshot => {
-    // Usar dessa forma é equivalente ao .on('value') do Realtime Database
-    // snapshot.docs.forEach();
-    
+      // traz todos os dados com a o evento 'added' na primeira chamada e depois
+      // traz apenas os novos documentos ou documentos que sofreram alterações
+      snapshot.docChanges().forEach((card) => {
+        if (card.type == "added") {
+          adicionaCardATela(card.doc.data(), card.doc.id);
+        }
 
-    // traz todos os dados com a o evento 'added' na primeira chamada e depois
-    // traz apenas os novos documentos ou documentos que sofreram alterações
-     snapshot.docChanges().forEach(card => {
-       if(card.type == 'added') {
-         adicionaCardATela(card.doc.data(), card.doc.id);
-       }
+        if (card.type == "modified") {
+          console.log("Modified => ", card.doc.data());
+        }
 
-       if(card.type == 'modified'){
-         console.log('Modified => ', card.doc.data());
-       }
-
-       if(card.type == 'removed'){
-        console.log('removed => ', card.data());
-      }
-     })
-   })
+        if (card.type == "removed") {
+          console.log("removed => ", card.data());
+        }
+      });
+    });
 });
 
 /**
