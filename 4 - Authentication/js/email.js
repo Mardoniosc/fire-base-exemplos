@@ -50,6 +50,27 @@ document.addEventListener("DOMContentLoaded", function () {
     if (usuario) {
       console.log("Usuario => ", usuario);
       currentUser = usuario;
+
+      // Mudando o idioma do firebase
+      firebase.auth().languageCode = "pt";
+
+      //Muda o idioma, porem utilizando o idioma do aparelho
+      firebase.auth().useDeviceLanguage();
+
+      if (!usuario.emailVerified) {
+        // Envia um email para o usuário verificar a conta dele
+        // usuario.sendEmailVerification().then(() => {
+        //   alert("E-mail de verificação enviado!");
+        // });
+      }
+
+      // Envia um e-mail para mudança de senha ao e-mail passado por parametro
+    //   firebase
+    //     .auth()
+    //     .sendPasswordResetEmail(usuario.email)
+    //     .then(() => {
+    //       alert("Email para reset de senha enviado!");
+    //     });
     } else {
       console.log("Não há usuário logados");
     }
