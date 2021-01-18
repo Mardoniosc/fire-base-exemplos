@@ -95,15 +95,30 @@ fileInput.onchange = function (event) {
     }
   );
 
-//   tarefaDeUpload
-//     .then((snapshot) => {
-//       console.log("Snapshot => ", snapshot);
-//     })
-//     .catch((err) => {
-//       // pEga o erro de cancelamento da tarefa
-//       console.error(err);
-//     });
+  //   tarefaDeUpload
+  //     .then((snapshot) => {
+  //       console.log("Snapshot => ", snapshot);
+  //     })
+  //     .catch((err) => {
+  //       // pEga o erro de cancelamento da tarefa
+  //       console.error(err);
+  //     });
 };
+
+/**
+ * Deletar um arquivo
+ */
+function deletar() {
+  ref
+    .child("-MRKuNEHuaeLGJcqy3TW")
+    .delete()
+    .then(() => {
+      console.log("Deletou com sucesso!");
+    })
+    .catch((err) => {
+      console.log("Erro ao excluir arquivo => ", err);
+    });
+}
 
 /**
  * Metodo que observa mudanças no input de string
