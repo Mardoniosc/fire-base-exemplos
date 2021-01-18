@@ -248,15 +248,45 @@ document.addEventListener("DOMContentLoaded", function () {
    * .limit(numero) : Retorna o numero de resultados que foi passado no metodo.
    */
 
+  // firebase
+  //   .firestore()
+  //   .collection("cards")
+  //   .limit(3)
+  //   .get()
+  //   .then((snapshot) => {
+  //     snapshot.docs.forEach((card) => {
+  //       adicionaCardATela(card.data(), card.id);
+  //     });
+  //   });
+
+  /**
+   * Cursores / Filtrar
+   * .startAt(valor): Começa a filtrar no valor passado. Funciona como o operador >=
+   * .startAfter(valor) : Funciona como o operador >
+   * .endBefore(valor) : Funciona como o operador de <
+   * .endAt(valor) : Funciona como o operador de <=
+   * Os cursos aceitam alem de um valor, um documento para começar os filtros
+   */
+
+  var startAt;
   firebase
     .firestore()
     .collection("cards")
     .limit(3)
     .get()
-    .then((snapshot) => {
-      snapshot.docs.forEach((card) => {
-        adicionaCardATela(card.data(), card.id);
-      });
+    .then((snap) => {
+      startAt = snap.docs[snap.docs.length - 1];
+
+      firebase
+        .firestore()
+        .collection("cards")
+        .startAt(startAt)
+        .get()
+        .then((snapshot) => {
+          snapshot.docs.forEach((card) => {
+            adicionaCardATela(card.data(), card.id);
+          });
+        });
     });
 });
 
