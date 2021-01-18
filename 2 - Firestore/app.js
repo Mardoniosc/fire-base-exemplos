@@ -43,14 +43,14 @@ function criarCard() {
   /**
    * .add({dados}) : adiciona os dados dentro de um UID gerado automaticamente
    */
-  // firebase
-  //   .firestore()
-  //   .collection("cards")
-  //   .add(card)
-  //   .then(() => {
-  //     console.log("Dados salvos");
-  //     // adicionaCardATela(card, 1);
-  //   });
+  firebase
+    .firestore()
+    .collection("cards")
+    .add(card)
+    .then(() => {
+      console.log("Dados salvos");
+      adicionaCardATela(card, 1);
+    });
 
   /**
    * Gravações em lote
@@ -61,27 +61,27 @@ function criarCard() {
    *  - Ao criar todos os metodos é necessário executar o metodo .commit() para executar todas as operações.
    *  - com o batych, ou são gravados todas as operações, ou nenhuma é gravada.
    */
-  var batch = firebase.firestore().batch();
-  var cards = [];
+  // var batch = firebase.firestore().batch();
+  // var cards = [];
 
-  for (var i = 0; i < 3; i++) {
-    let doc = {
-      nome: NOMES[Math.floor(Math.random() * NOMES.length - 1)],
-      idade: Math.floor(Math.random() * 22 + 18),
-      curtidas: 0,
-    };
+  // for (var i = 0; i < 3; i++) {
+  //   let doc = {
+  //     nome: NOMES[Math.floor(Math.random() * NOMES.length - 1)],
+  //     idade: Math.floor(Math.random() * 22 + 18),
+  //     curtidas: 0,
+  //   };
 
-    cards.push(doc);
-    let ref = firebase.firestore().collection("cards").doc(String(i));
+  //   cards.push(doc);
+  //   let ref = firebase.firestore().collection("cards").doc(String(i));
 
-    batch.set(ref, doc);
-  }
+  //   batch.set(ref, doc);
+  // }
 
-  batch.commit(() => {
-    for (let i = 0; i < cards.length; i++) {
-      adicionaCardATela(cards[i], i);
-    }
-  });
+  // batch.commit(() => {
+  //   for (let i = 0; i < cards.length; i++) {
+  //     adicionaCardATela(cards[i], i);
+  //   }
+  // });
 }
 
 /**
