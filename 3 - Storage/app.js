@@ -59,17 +59,51 @@ fileInput.onchange = function (event) {
   //     console.log(metadata);
   //   });
 
-
   // atribui a tarefa de uploa a variavel de tarefaDeUpload e executa essa tarefa ao dar put()
   tarefaDeUpload = ref.child(uid).put(arquivo);
-  tarefaDeUpload.then(snapshot => {
-    console.log('Snapshot => ', snapshot)
-  }).catch(err => {
 
-    // pEga o erro de cancelamento da tarefa
-    console.error(err)
-  })
-};
+  /**
+   * .on('state_changed', observavel_upload(), error(), completou())
+   */
+  tarefaDeUpload.on(
+    "state_changed",
+    (upload) => {
+      console.log("mudou o estado", upload);
+
+      // .state retorna o estado do upload. Ele por ser running paused ou success
+      if (upload.state == "running") {
+        // .bytesTransferred são os bytes transferidos
+        // .totalBytes são os bytes totais do arquivo
+        var progresso = Math.round(
+          (upload.bytesTransferred / upload.totalBytes) * 100
+        );
+
+        console.log(`${progresso}%`);
+      }
+    },
+    (err) => {
+      console.log("Ocorreu um erro", err);
+    },
+    () => {
+      console.log("Completou a tarefa");
+      ref
+        .child(uid)
+        .getDownloadURL()
+        .then((url) => {
+          console.log("URL download => ", url);
+        });
+    }
+  );
+
+//   tarefaDeUpload
+//     .then((snapshot) => {
+//       console.log("Snapshot => ", snapshot);
+//     })
+//     .catch((err) => {
+//       // pEga o erro de cancelamento da tarefa
+//       console.error(err);
+//     });
+// };
 
 /**
  * Metodo que observa mudanças no input de string
