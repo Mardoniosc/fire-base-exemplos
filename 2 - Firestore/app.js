@@ -226,14 +226,32 @@ document.addEventListener("DOMContentLoaded", function () {
   //     });
   //   });
 
+  /**
+   * Ordenação
+   * .orderBy(campo, ordenação) : Ordena pelo campo e pelo tipo de ordenação passada,
+   * tipo não obrigatorio
+   * OBS: ao usar juntamente do .where() deve-se ordenar pelo mesmo campo
+   */
+  // firebase
+  //   .firestore()
+  //   .collection("cards")
+  //   .orderBy("curtidas", "desc")
+  //   .get()
+  //   .then((snapshot) => {
+  //     snapshot.docs.forEach((card) => {
+  //       adicionaCardATela(card.data(), card.id);
+  //     });
+  //   });
 
   /**
-   * .orderBy
+   * Limite
+   * .limit(numero) : Retorna o numero de resultados que foi passado no metodo.
    */
+
   firebase
     .firestore()
     .collection("cards")
-    .orderBy("curtidas", "desc")
+    .limit(3)
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((card) => {
