@@ -212,12 +212,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * .where(campo, operador, valor): Retorna dados que obedecerem a condição passada
+   * .where não aceita || ou && e nem !=
+   */
+  // firebase
+  //   .firestore()
+  //   .collection("cards")
+  //   .where("idade", ">", 25)
+  //   .where("idade", "<", 35)
+  //   .get()
+  //   .then((snapshot) => {
+  //     snapshot.docs.forEach((card) => {
+  //       adicionaCardATela(card.data(), card.id);
+  //     });
+  //   });
+
+
+  /**
+   * .orderBy
    */
   firebase
     .firestore()
     .collection("cards")
-    .where("idade", ">", 25)
-    .where("idade", "<", 35)
+    .orderBy("curtidas", "desc")
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((card) => {
