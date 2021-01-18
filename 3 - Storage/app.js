@@ -8,6 +8,7 @@ var stringInput = document.getElementById("string-input");
  * Referencia para o storage do firebase criando uma pasta com o nome de arquivos
  */
 var ref = firebase.storage().ref("arquivos");
+var tarefaDeUpload;
 /**
  * Metodo que observa mudanças no input de arquivo
  */
@@ -23,29 +24,29 @@ fileInput.onchange = function (event) {
    * .child(nome) : Acessar o caminhjo para inserir o arquivo
    * .put(arquivo) : Vai inserir o arquivo
    */
-  ref
-    .child(uid)
-    .put(arquivo, { customMetadata: { nome: "Curriculo" } })
-    .then((snapshot) => {
-      console.log("Snapshot => ", snapshot);
+  // ref
+  //   .child(uid)
+  //   .put(arquivo, { customMetadata: { nome: "Curriculo" } })
+  //   .then((snapshot) => {
+  //     console.log("Snapshot => ", snapshot);
 
-      /**
-       * .getDownloadURL() - Retorna a url para dowload/apresentação desse arquivo enviado
-       */
-      ref
-        .child(uid)
-        .getDownloadURL()
-        .then((url) => {
-          console.log("Download URL String => ", url);
-        });
+  //     /**
+  //      * .getDownloadURL() - Retorna a url para dowload/apresentação desse arquivo enviado
+  //      */
+  //     ref
+  //       .child(uid)
+  //       .getDownloadURL()
+  //       .then((url) => {
+  //         console.log("Download URL String => ", url);
+  //       });
 
-      ref
-        .child(uid)
-        .getMetadata()
-        .then((metadata) => {
-          console.log("Metadados => ", metadata);
-        });
-    });
+  //     ref
+  //       .child(uid)
+  //       .getMetadata()
+  //       .then((metadata) => {
+  //         console.log("Metadados => ", metadata);
+  //       });
+  //   });
 
   /**
    * .getMetada() : Retorna os metadados do arquivo inserido.
@@ -57,6 +58,17 @@ fileInput.onchange = function (event) {
   //   .then((metadata) => {
   //     console.log(metadata);
   //   });
+
+
+  // atribui a tarefa de uploa a variavel de tarefaDeUpload e executa essa tarefa ao dar put()
+  tarefaDeUpload = ref.child(uid).put(arquivo);
+  tarefaDeUpload.then(snapshot => {
+    console.log('Snapshot => ', snapshot)
+  }).catch(err => {
+
+    // pEga o erro de cancelamento da tarefa
+    console.error(err)
+  })
 };
 
 /**
@@ -87,4 +99,24 @@ stringInput.onchange = function (event) {
           });
       });
   };
+};
+
+/**
+ * Pausa a tarefa de upload
+ */
+pausar = function () {
+  tarefaDeUpload.pause();
+  console.log("Pausou tarefa");
+};
+
+// continuar a tarefa de upload pausada
+continuar = function () {
+  tarefaDeUpload.resume();
+  console.log("continuou tarefa");
+};
+
+// cancela a tarefa de upload
+cancelar = function () {
+  tarefaDeUpload.cancel();
+  console.log("cancelou tarefa");
 };
