@@ -31,7 +31,7 @@ fileInput.onchange = function (event) {
         .child("arquivo")
         .getDownloadURL()
         .then((url) => {
-          console.log('Download URL String => ', url);
+          console.log("Download URL String => ", url);
         });
     });
 };
@@ -39,4 +39,30 @@ fileInput.onchange = function (event) {
 /**
  * Metodo que observa mudanças no input de string
  */
-stringInput.onchange = function (event) {};
+stringInput.onchange = function (event) {
+  var arquivo = event.target.files[0];
+
+  const reader = new FileReader();
+  reader.readAsDataURL(arquivo);
+  reader.onload = function () {
+    const base64 = reader.result.split("base64,")[1];
+    console.log(base64);
+
+    ref
+      .child("imagem")
+      .putString(base64, "base64", { contentType: "image/png" })
+      .then((snapshot) => {
+
+        /**
+         * .putString(string, formato, metadados) : Slava uma string no firebase e eu posso colocar um formato de
+         * imagem para que ele automaticamente converta para um png
+         */
+        ref
+          .child("imagem")
+          .getDownloadURL()
+          .then((url) => {
+            console.log("Download URL String => ", url);
+          });
+      });
+  };
+};
