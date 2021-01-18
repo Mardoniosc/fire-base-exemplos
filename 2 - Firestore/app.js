@@ -63,13 +63,52 @@ function deletar(id) {}
  * Incrementa o numero de curtidas
  * @param {String} id Id do card
  */
-function curtir(id) {}
+function curtir(id) {
+  var card = document.getElementById(id);
+  var count = card.getElementsByClassName("count-number")[0];
+  var countNumber = +count.innerText;
+  countNumber = countNumber + 1;
+
+  /**
+   * .update ({dados}): Atualiza todos os dados passados no parametro.
+   * OBS: Pode ser usado apenas em docs
+   */
+  firebase
+    .firestore()
+    .collection('cards')
+    .doc(id)
+    .update({ curtidas: countNumber })
+    .then(() => {
+      count.innerText = countNumber;
+    });
+}
 
 /**
  * Decrementa o numero de curtidas
  * @param {String} id Id do card
  */
-function descurtir(id) {}
+function descurtir(id) {
+  var card = document.getElementById(id);
+  var count = card.getElementsByClassName("count-number")[0];
+  var countNumber = +count.innerText;
+  if (countNumber > 0) {
+    countNumber = countNumber - 1;
+
+     /**
+     * .update ({dados}): Atualiza todos os dados passados no parametro.
+     * OBS: Pode ser usado apenas em docs
+     */
+    firebase
+    .firestore()
+    .collection('cards')
+    .doc(id)
+    .update({ curtidas: countNumber })
+    .then(() => {
+      count.innerText = countNumber;
+    });
+
+  }
+}
 
 /**
  * Espera o evento de que a DOM está pronta para executar algo
