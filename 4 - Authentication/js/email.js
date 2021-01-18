@@ -1,3 +1,5 @@
+var currentUser;
+
 /**
  * Função para cadastro com email e senha
  */
@@ -42,4 +44,41 @@ function loginEmail() {
 /**
  * Listener de dom ready
  */
-document.addEventListener("DOMContentLoaded", function () {});
+document.addEventListener("DOMContentLoaded", function () {
+  // observa se há um usuário e mudanças na autyenticação(login ou logout)
+  firebase.auth().onAuthStateChanged((usuario) => {
+    if (usuario) {
+      console.log("Usuario => ", usuario);
+      currentUser = usuario;
+    } else {
+      console.log("Não há usuário logados");
+    }
+  });
+
+  // vai pegar dados do usuário
+  currentUser = firebase.auth().currentUser;
+
+  if (currentUser) {
+    console.log("currentUser => ", currentUser);
+
+    // Metodos para update de dados do usuário criado no auth
+    currentUser.updateProfile({
+      displayName: "Mardonio Costa",
+      photoUrl: "",
+    });
+    // currentUser.updateEmail("mardonio@live.com");
+    // currentUser.updatePassword("123123");
+    // currentUser.updatePhoneNumber("+5561984137835");
+  }
+});
+
+/**
+ * Deleta um usuário
+ */
+function deletaUsuario() {
+  if (currentUser) {
+    currentUser.delete().then(() => {
+      alert("Usuario excluido");
+    });
+  }
+}
