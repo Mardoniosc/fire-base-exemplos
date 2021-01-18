@@ -103,7 +103,7 @@ fileInput.onchange = function (event) {
 //       // pEga o erro de cancelamento da tarefa
 //       console.error(err);
 //     });
-// };
+};
 
 /**
  * Metodo que observa mudanças no input de string
