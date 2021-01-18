@@ -49,7 +49,7 @@ function criarCard() {
     .add(card)
     .then(() => {
       console.log("Dados salvos");
-      adicionaCardATela(card, 1);
+      // adicionaCardATela(card, 1);
     });
 }
 
@@ -57,7 +57,36 @@ function criarCard() {
  * Recebe a referencia do card e exclui do banco de dados
  * @param {String} id Id do card
  */
-function deletar(id) {}
+function deletar(id) {
+  var card = document.getElementById(id);
+
+  /**
+   * .delete() : Deleta o documento da coleção.
+   * OBS: Pode ser usado APENAS em documentos.
+   */
+  firebase
+    .firestore()
+    .collection('cards')
+    .doc(id)
+    .delete()
+    .then(() => {
+      card.remove();
+    });
+
+    /**
+     * Para remover uma propriedade do documento, podemos dar um update() e passamos no objeto
+     * a propriedade que sera excluida e chamamos o metodo de .delete vindo de firebase.firestore.FieldValue
+     * 
+     */
+  // firebase
+  //   .firestore()
+  //   .collection("cards")
+  //   .doc(id)
+  //   .update({ curtidas: firebase.firestore.FieldValue.delete() })
+  //   .then(() => {
+  //     console.log("Removido curtidas!");
+  //   });
+}
 
 /**
  * Incrementa o numero de curtidas
@@ -75,7 +104,7 @@ function curtir(id) {
    */
   firebase
     .firestore()
-    .collection('cards')
+    .collection("cards")
     .doc(id)
     .update({ curtidas: countNumber })
     .then(() => {
@@ -94,19 +123,18 @@ function descurtir(id) {
   if (countNumber > 0) {
     countNumber = countNumber - 1;
 
-     /**
+    /**
      * .update ({dados}): Atualiza todos os dados passados no parametro.
      * OBS: Pode ser usado apenas em docs
      */
     firebase
-    .firestore()
-    .collection('cards')
-    .doc(id)
-    .update({ curtidas: countNumber })
-    .then(() => {
-      count.innerText = countNumber;
-    });
-
+      .firestore()
+      .collection("cards")
+      .doc(id)
+      .update({ curtidas: countNumber })
+      .then(() => {
+        count.innerText = countNumber;
+      });
   }
 }
 
@@ -173,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (card.type == "removed") {
-          console.log("removed => ", card.data());
+          console.log("removed");
         }
       });
     });
