@@ -40,6 +40,15 @@ exports.updateCount = functions.database.ref('/card/{pushId}').onCreate((snapsho
     });
 });
 
+exports.updateName = functions.firestore.document('/cards/{userId}').onCreate((snapshot, context) => {
+    let nome = snapshot.data().nome;
+    nome = nome.toUpperCase();
+
+    admin.firestore().collection('cards').doc(snapshot.id).update({nome}).then(() => {
+        return nome;
+    })
+})
+
 // exports.updateName = functions.firestore.document('/cards/{userId}').onCreate((snapshot, context) => {
 //     let nome = snapshot.data().nome;
 //     nome = nome.toUpperCase();
