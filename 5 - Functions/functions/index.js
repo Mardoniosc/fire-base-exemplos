@@ -30,15 +30,15 @@ exports.addCard = functions.https.onRequest((request, response) => {
  * .onDelete = ao excluir um dado em um nó
  * .onWrite = ao executar qualquer uma das funções anteriores
  */
-// exports.updateCount = functions.database.ref('/card/{pushId}').onCreate((snapshot, context) => {
-//     // .onceCreate((snapshot, context)): snapshot é o dado atual / contexto da chamada.
-//     admin.database().ref('card').once('value').then(snap => {
-//         admin.database().ref('contagem').set(snap.numChildren()).then(() => {
-//             // é preciso retornar um dado ou uma promessa
-//             return snap.numChildren();
-//         })
-//     });
-// });
+exports.updateCount = functions.database.ref('/card/{pushId}').onCreate((snapshot, context) => {
+    // .onceCreate((snapshot, context)): snapshot é o dado atual / contexto da chamada.
+    admin.database().ref('card').once('value').then(snap => {
+        admin.database().ref('contagem').set(snap.numChildren()).then(() => {
+            // é preciso retornar um dado ou uma promessa
+            return snap.numChildren();
+        })
+    });
+});
 
 // exports.updateName = functions.firestore.document('/cards/{userId}').onCreate((snapshot, context) => {
 //     let nome = snapshot.data().nome;
