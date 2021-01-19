@@ -5,7 +5,7 @@ function loginGoogle() {
     .auth()
     .signInWithPopup(provider)
     .then((response) => {
-      console.log(`Usuario ${response.user}`);
+      console.log("Usuario", response.user);
       console.log("Token => ", response.credential.accessToken);
     })
     .catch((err) => {
